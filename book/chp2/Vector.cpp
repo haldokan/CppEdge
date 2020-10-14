@@ -15,7 +15,7 @@ Vector::Vector(int _len, Category _category) {
     category = _category;
 }
 
-int Vector::get_size() {
+const int Vector::get_size() {
     return length;
 }
 
@@ -26,6 +26,12 @@ double& Vector::operator[](int index) {
     return items[index];
 }
 
-Category Vector::get_category() noexcept {
+const Category Vector::get_category() noexcept {
     return category;
+}
+
+// if a func creates a Vector and the func executes and goes out of scope this destructor is called to free heap memory
+Vector::~Vector() {
+    cout << "destructor is called" << endl;
+    delete [] items; // plain delete deletes a single object, delete[] deletes the array
 }
