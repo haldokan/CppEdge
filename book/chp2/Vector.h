@@ -1,6 +1,8 @@
 #ifndef CPP_VECTOR_H
 #define CPP_VECTOR_H
 
+using namespace std;
+
 namespace N {
     enum class Category {
         small, medium, large
@@ -27,6 +29,8 @@ namespace N {
         Vector(int);
 
         Vector(int, Category);
+
+        Vector(initializer_list<double>);
 
         ~Vector();
 

@@ -6,6 +6,7 @@ using namespace N;
 
 Vector::Vector(int _len): Vector(_len, Category::small) {};
 
+// note that there are two syntactic styles of constructors: this one and the one below
 Vector::Vector(int _len, Category _category) {
     if (_len < 0) {
         throw length_error("negative vector length: " + to_string(_len));
@@ -13,6 +14,11 @@ Vector::Vector(int _len, Category _category) {
     length = _len;
     items = new double[_len];
     category = _category;
+}
+
+// you gotta love this static-cast crap: arrays subscripts are unsigned int so they need the case to int here
+Vector::Vector(initializer_list<double> init_list): length {static_cast<int>(init_list.size())}, items { new double [init_list.size()]} {
+    copy(init_list.begin(), init_list.end(), items);
 }
 
 const int Vector::get_size() {

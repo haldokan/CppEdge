@@ -3,8 +3,6 @@
 
 using namespace std;
 
-//Complex(): Complex(0, 0);
-
 Complex::Complex(): Complex(0, 0) {}
 
 Complex::Complex(double rl, double img) : rl(rl), img(img) {}

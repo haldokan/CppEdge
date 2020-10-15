@@ -86,7 +86,31 @@ void structured_binding_classes() {
 //    auto [re, im] = cnum + 7.1;
 };
 
-int main() {
+void init_container_with_init_list() {
+    cout << "init_container_with_init_list" << endl;
+    Vector v = { 1.2, 3.2, 7.1 }; // the compiler creates an object of type initializer_list and feed the Vector cntr
+    cout << v[1] << endl;
+}
+
+void handling_exceptions() {
+    cout << "handling_exceptions" << endl;
+    try {
+        Vector vec2 = Vector(4);
+        vec2[0] = 1;
+        vec2[2] = 5;
+        vec2[3] = 10;
+        vec2[166] = 3;
+        // not how the exception is passed to the catch stmt by ref to avoid copying
+    } catch (out_of_range& e) {
+        cerr << "caught it: " << e.what() << endl;
+    } catch (bad_alloc& e) {
+        cerr << "could not allocate memory" << endl;
+        terminate();
+    }
+}
+
+void work_with_struts() {
+    cout << "work_with_struts" << endl;
     Vector01 v;
     init_vector(v, 3);
     v.items[0] = 2.1;
@@ -95,7 +119,10 @@ int main() {
 
     cout << v.size << " - " << v.items[0] << endl;
     cout << "sum = " << sum(v) << endl;
+}
 
+void work_with_classes() {
+    cout << "work_with_classes" << endl;
     Vector vec = Vector(3);
     vec[0] = 1.5;
     vec[1] = 2.1;
@@ -110,36 +137,33 @@ int main() {
     cout << "pbr::vec.size = " << vec.get_size() <<  " - sum = " << sum2(vec) << endl;
     cout << "pbr::v[0] = " << vec[0] << endl;
 
-    // I think this is passing the pointer - what is the diff? Go figure!
-    cout << "pbn::vec.size = " << vec.get_size() <<  " - sum = " << sum3(vec) << endl;
-    cout << "pbn::v[0] = " << vec[0] << endl;
+    // This is a turd-pie: we pass vec to sum3 by value
+    // But even tho we pass by value the double array in Vector is allocated on the heap and is common for the
+    // argument we pass to sum3 and and param value. When sum3 is removed from the stack (finishes) the vec destructor is
+    // called and the double array is freed. after that when this func is removed from the stack the vec destructor is called
+    // again to free the (already freed) double array on the heap. This gives this out of context exception that reminds me
+    // of my C days at school:
+    // cpp2(7982,0x11b6e6dc0) malloc: *** error for object 0x7fe24fc05850: pointer being freed was not allocated
 
-    try {
-        Vector vec2 = Vector(3);
-        vec2[0] = 1;
-        vec2[2] = 5;
-        vec2[3] = 10;
-        vec2[166] = 3;
-        // not how the exception is passed to the catch stmt by ref to avoid copying
-    } catch (out_of_range& e) {
-        cerr << "caught it: " << e.what() << endl;
-    } catch (bad_alloc) {
-        cerr << "could not allocate memory" << endl;
-        terminate();
-    }
+//    cout << "pbn::vec.size = " << vec.get_size() <<  " - sum = " << sum3(vec) << endl;
+//    cout << "pbn::v[0] = " << vec[0] << endl;
+}
 
+int main() {
     vector<int> v1 = {1, 2, 3};
     vector<int> v2 = {7, 5, 9};
-
     pass_by_val_or_ref(v1, v2);
     cout << v1[0] << "-" << v2[0] << endl;
 
+    work_with_classes();
+    work_with_struts();
     default_arg(2, 7);
     default_arg(2);
-
+    handling_exceptions();
     structured_binding_struct();
     structured_binding_maps();
     structured_binding_classes();
+    init_container_with_init_list();
 
     return 0;
 }
