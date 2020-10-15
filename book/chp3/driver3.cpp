@@ -1,5 +1,8 @@
 #include <iostream>
 #include "headers/Complex.h"
+#include "headers/Container1.h"
+#include "headers/Vector_Container.h"
+#include "headers/Container_Factory.h"
 
 using namespace std;
 
@@ -27,9 +30,24 @@ void add_complex_nums() {
     cout << c2.real() << "-" << c2.imag() << endl;
 }
 
+// malloc: *** error for object 0x7fb67cc058c0: pointer being freed was not allocated
+void polymorphic(Container1& c1) {
+    cout << c1.length() << " - " << c1[1] << endl;
+}
+
+void class_inheritance() {
+    cout << "class_inheritance" << endl;
+    unique_ptr<Container1> vec_cont = Container_Factory::createContainer({1.2, 7.9, 1.1}, 1);
+    cout << vec_cont->length() << endl;
+    // look at this beauty (not) for accessing subscript from a unique_ptr
+    cout << (*vec_cont)[1] << endl;
+    polymorphic(*vec_cont);
+}
+
 int main() {
     const_call_rules();
     add_complex_nums();
+    class_inheritance();
 
     return 0;
 }

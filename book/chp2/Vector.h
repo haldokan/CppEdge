@@ -1,5 +1,6 @@
 #ifndef CPP_VECTOR_H
 #define CPP_VECTOR_H
+#include <initializer_list>
 
 using namespace std;
 
@@ -36,7 +37,7 @@ namespace N {
 
         // const signifies that this func doesn't modify its object. It can be called by const and non-const objects
         // however non-const funcs cannot be called by const objects (talk about simplicity!)
-        const int get_size();
+        int get_size() const;
 
         double &operator[](int);
 

@@ -21,7 +21,7 @@ Vector::Vector(initializer_list<double> init_list): length {static_cast<int>(ini
     copy(init_list.begin(), init_list.end(), items);
 }
 
-const int Vector::get_size() {
+int Vector::get_size() const {
     return length;
 }
 
