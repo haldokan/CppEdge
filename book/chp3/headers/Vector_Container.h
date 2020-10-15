@@ -10,7 +10,7 @@ class Vector_Container : public Container1 {
 private:
     N::Vector vec; // N is the name space defined in Vector.h
 public:
-    Vector_Container(const N::Vector &vec);
+    Vector_Container(initializer_list<double>);
 
     int length() const override;
 

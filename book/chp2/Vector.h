@@ -33,6 +33,8 @@ namespace N {
 
         Vector(initializer_list<double>);
 
+        Vector();
+
         ~Vector();
 
         // const signifies that this func doesn't modify its object. It can be called by const and non-const objects

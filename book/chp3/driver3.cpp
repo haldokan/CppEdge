@@ -31,8 +31,8 @@ void add_complex_nums() {
 }
 
 // malloc: *** error for object 0x7fb67cc058c0: pointer being freed was not allocated
-void polymorphic(Container1& c1) {
-    cout << c1.length() << " - " << c1[1] << endl;
+void polymorphic(unique_ptr<Container1>& c1) {
+    cout << c1->length() << " - " << (*c1)[1] << endl;
 }
 
 void class_inheritance() {
@@ -41,7 +41,7 @@ void class_inheritance() {
     cout << vec_cont->length() << endl;
     // look at this beauty (not) for accessing subscript from a unique_ptr
     cout << (*vec_cont)[1] << endl;
-    polymorphic(*vec_cont);
+    polymorphic(vec_cont);
 }
 
 int main() {
