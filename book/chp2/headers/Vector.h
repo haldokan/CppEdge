@@ -27,7 +27,7 @@ namespace N {
         double *items;
         Category category;
     public:
-        Vector(int);
+        explicit Vector(int); // no implicit conversion from int to vector
 
         Vector(int, Category);
 

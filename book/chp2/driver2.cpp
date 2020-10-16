@@ -2,7 +2,7 @@
 #include <vector>
 #include <map>
 #include<complex>
-#include "Vector.h"
+#include "headers/Vector.h"
 
 //import Vector2; -- does not work
 
@@ -149,6 +149,24 @@ void work_with_classes() {
 //    cout << "pbn::v[0] = " << vec[0] << endl;
 }
 
+// the craziness here is avoided by making the Vector(int) cntr explict (no implicit conversion from int to vector)
+void crazy_constructor_conversion() {
+    cout << "crazy_constructor_conversion" << endl;
+    // our Vector class provides a cntr that takes (1) arg of type int which means this cntr is a conversion cntr that turns
+    // an int to vector... watch this insanity:
+//    Vector v1  = 7; // B.S.: This is typically considered unfortunate
+//    cout << v1.get_size() << endl;
+//    Vector v2 = 3;
+    // v1 + v2 -- fortunately this is not possible
+
+    // this is ok
+    Vector v1 (7);
+    cout << v1.get_size() << endl;
+    // note that this creates Vector using the cntr with the initializer_list
+    Vector v2 {10};
+    cout << v2.get_size() << endl;
+}
+
 int main() {
     vector<int> v1 = {1, 2, 3};
     vector<int> v2 = {7, 5, 9};
@@ -164,6 +182,6 @@ int main() {
     structured_binding_maps();
     structured_binding_classes();
     init_container_with_init_list();
-
+    crazy_constructor_conversion();
     return 0;
 }
