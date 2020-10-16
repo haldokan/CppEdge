@@ -3,18 +3,18 @@ project(cpp)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(cpp1 book/chp1/driver1.cpp)
-add_executable(cpp2 book/chp2/driver2.cpp book/chp2/Vector.cpp book/chp2/headers/Vector.h book/chp2/Vector_cpp20.cpp)
-# note that this executable uses Vector.h and Vector.cpp from chp2 so they must be included here so the linker can find & link them
+add_executable(cpp1 braintrain/newton/driver1.cpp)
+add_executable(cpp2 braintrain/einstein/driver2.cpp braintrain/einstein/Vector.cpp braintrain/einstein/headers/Vector.h braintrain/einstein/Vector_cpp20.cpp)
+# note that this executable uses Vector.h and Vector.cpp from einstein so they must be included here so the linker can find & link them
 add_executable(
         cpp3
-        book/chp3/driver3.cpp
-        book/chp3/Complex2.cpp
-        book/chp3/headers/Complex3.h
-        book/chp3/Vector_Container.cpp
-        book/chp3/headers/Container1.h
-        book/chp3/headers/Vector_Container.h
-        book/chp2/headers/Vector.h
-        book/chp2/Vector.cpp
-        book/chp3/Container_Factory.cpp book/chp3/headers/Container_Factory.h)
-add_executable(cpp4 book/chp4/driver4.cpp book/chp4/Complex3.cpp book/chp4/headers/Complex3.h)
+        braintrain/pythagoras/driver3.cpp
+        braintrain/pythagoras/Complex2.cpp
+        braintrain/pythagoras/headers/Complex3.h
+        braintrain/pythagoras/Vector_Container.cpp
+        braintrain/pythagoras/headers/Container1.h
+        braintrain/pythagoras/headers/Vector_Container.h
+        braintrain/einstein/headers/Vector.h
+        braintrain/einstein/Vector.cpp
+        braintrain/pythagoras/Container_Factory.cpp braintrain/pythagoras/headers/Container_Factory.h)
+add_executable(cpp4 braintrain/khwarizmi/driver4.cpp braintrain/khwarizmi/Complex3.cpp braintrain/khwarizmi/headers/Complex3.h)

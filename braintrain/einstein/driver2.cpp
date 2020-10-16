@@ -82,7 +82,7 @@ void structured_binding_classes() {
     cout << cnum.real() << "-" << cnum.imag() << endl;
     /*A complex has two data members, but its interface consists of access functions, such as real() and imag().
      * Mapping a complex<double> to two local variables, such as re and im is feasible and efficient, but the technique
-     * for doing so is beyond the scope of this book.*/
+     * for doing so is beyond the scope of this braintrain.*/
 //    auto [re, im] = cnum + 7.1;
 };
 
