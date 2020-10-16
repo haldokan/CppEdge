@@ -2,8 +2,6 @@
 #define CPP_VECTOR_CONTAINER_H
 
 #include "Container1.h"
-#include "Vector_Container.h"
-
 using namespace std;
 
 class Vector_Container : public Container1 {

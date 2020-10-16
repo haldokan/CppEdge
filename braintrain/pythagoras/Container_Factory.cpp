@@ -11,7 +11,6 @@ unique_ptr<Container1> Container_Factory::createContainer(initializer_list<doubl
             return unique_ptr<Container1>(new Vector_Container(init));
         default:
             throw invalid_argument(to_string(type));
-
     }
 
 }
