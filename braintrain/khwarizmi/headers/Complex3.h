@@ -11,6 +11,8 @@ public:
 
     Complex3(double, double);
 
+    Complex3(Complex3&);
+
     [[nodiscard]] double real() const;
 
     [[nodiscard]] double imag() const;
