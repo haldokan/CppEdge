@@ -4,6 +4,7 @@
 using namespace std;
 
 Vector3::Vector3(int len) {
+    cout << "Vector3-conversion-cntr is called" << endl;
     if (len < 0) {
         throw length_error("negative vector length: " + to_string(len));
     }
@@ -12,6 +13,7 @@ Vector3::Vector3(int len) {
 }
 
 Vector3::Vector3(initializer_list<double> init): length {static_cast<int>(init.size())}, items{new double[length]} {
+    cout << "Vector3-initializer-list-cntr is called" << endl;
     copy(init.begin(), init.end(), items);
 }
 

@@ -79,7 +79,7 @@ void container_copy_assignment() {
 Vector3 container_move_constructor() {
     cout << "==>>container_move_constructor" << endl;
     Vector3 c1 {1, 2, 3};
-    Vector3 c3 = {7, 9, 4};
+    Vector3 c3 {7, 9, 4};
 
     // c1 resources are moved to c2 and c1 is now ready for the destructor to run when c2 goes out of this func scope:
     // destructor deletes the resources pointed to by the c2 handle
@@ -92,10 +92,10 @@ Vector3 container_move_constructor() {
     cout << "moved handle len = " << c1.get_size() << endl;
     // calling subscript on the moved container items kills the program due to 'segmentation fault 11':
     // Process finished with exit code 11
-//    cout << "moved handle items[0] = " << c1[0] << endl;
+    // cout << "moved handle items[0] = " << c1[0] << endl;
 
     cout << "client::before assigning c4 to c3" << endl;
-    Vector3 c4 = c3; // this calls the copy-cntr (right-hand side of assignment is lvalue)
+    Vector3 c4 {c3}; // this calls the copy-cntr (initialization is lvalue)
     //the return destroys the c4 handle and *moves* its resources it references to the caller scope (bcz Vector3 impl the move cntr)
     cout << "client::returning" << endl;
     return c4;
@@ -106,6 +106,27 @@ void container_move_constructor_caller() {
     cout << "len = " << v.get_size() << ", v[0] = " << v[0] << endl;
 }
 
+Vector3 createVector(int size) {
+    return Vector3(size); //
+}
+
+Vector3 copy_vs_move() {
+    cout << "==>>client::copy_vs_move" << endl;
+    Vector3 v1 = Vector3(2); // conversion (has 1 param)/regular cntr;
+    Vector3 v2 = v1; // copy-cntr (right-hand side of assignment is lvalue)
+    cout << v2.get_size() << endl;
+
+    // bellow would also work with v3 = createVector()
+    Vector3 v3 { createVector(3) }; //move-cntr ( initialization is rvalue) - I can't see the move-cntr prints tho
+    cout << v3.get_size() << endl;
+
+    v1 = createVector(7); // move-assignment (right-side of assignment is rvalue)
+    v1[0] = 17;
+    cout << v1.get_size()  << " - " << v1[0] << endl;
+
+    return v1; // the move constructor move the items managed by the v1 handle from this scope to the caller func scope
+}
+
 int main() {
     add_complex_nums();
     struct_copy_assignment();
@@ -113,6 +134,8 @@ int main() {
     container_copy_constructor();
     container_copy_assignment();
     container_move_constructor_caller();
+    Vector3 v = copy_vs_move();
+    cout << "should be 7: " << v.get_size() << " - should be 17: "<< v[0] << endl;
 
     return 0;
 }
