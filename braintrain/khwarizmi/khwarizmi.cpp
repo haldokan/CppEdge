@@ -75,12 +75,44 @@ void container_copy_assignment() {
     v2 = v3; // this calls the copy assign operator=
 }
 
+// required the impl of a move cntr and move assignment
+Vector3 container_move_constructor() {
+    cout << "==>>container_move_constructor" << endl;
+    Vector3 c1 {1, 2, 3};
+    Vector3 c3 = {7, 9, 4};
+
+    // c1 resources are moved to c2 and c1 is now ready for the destructor to run when c2 goes out of this func scope:
+    // destructor deletes the resources pointed to by the c2 handle
+    cout << "client::before calling move" << endl;
+    Vector3 c2 = move(c1); // this calls the move cntr with c1 as arg (it is called move-assignment tho)
+    // c2 destructor deletes c2 resources after this func return
+    cout << "should be 3: c2[2] = " << c2[2] << endl;
+
+    // we must NOT use c1 after we moved it because the move cntr assigned its resources to nullptr (examine Vector move cntr)
+    cout << "moved handle len = " << c1.get_size() << endl;
+    // calling subscript on the moved container items kills the program due to 'segmentation fault 11':
+    // Process finished with exit code 11
+//    cout << "moved handle items[0] = " << c1[0] << endl;
+
+    cout << "client::before assigning c4 to c3" << endl;
+    Vector3 c4 = c3; // this calls the copy-cntr (right-hand side of assignment is lvalue)
+    //the return destroys the c4 handle and *moves* its resources it references to the caller scope (bcz Vector3 impl the move cntr)
+    cout << "client::returning" << endl;
+    return c4;
+}
+
+void container_move_constructor_caller() {
+    Vector3 v = container_move_constructor();
+    cout << "len = " << v.get_size() << ", v[0] = " << v[0] << endl;
+}
+
 int main() {
     add_complex_nums();
     struct_copy_assignment();
     class_copy_constructor();
     container_copy_constructor();
     container_copy_assignment();
+    container_move_constructor_caller();
 
     return 0;
 }

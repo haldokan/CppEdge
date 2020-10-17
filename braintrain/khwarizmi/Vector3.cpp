@@ -28,10 +28,15 @@ Vector3::Vector3(Vector3 &&v): length {v.length}, items {v.items} { // move cntr
     v.items = nullptr;
 }
 
-// todo implement
-Vector3 &Vector3::operator=(Vector3 &&v) {
+Vector3 &Vector3::operator=(Vector3 &&v) { // move-assignment
     cout << "Vector3-move-assign is called" << endl;
+    delete [] items;
+    length = v.length;
+    items = v.items;
 
+    v.length = 0;
+    v.items = nullptr;
+    return *this;
 }
 
 Vector3 &Vector3::operator=(const Vector3 &v) { // copy-assignment
