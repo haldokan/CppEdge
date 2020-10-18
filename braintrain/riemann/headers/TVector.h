@@ -29,6 +29,10 @@ public:
     // however non-const funcs cannot be called by const objects (talk about simplicity!)
     int get_size() const;
 
+    T* begin(TVector<T>&) const;
+
+    T* end(TVector<T>&) const;
+
     T &operator[](int); // get the subscript and alter it if you want
 
     // the left const enables calling the subscript op by const, the right const indicates that the op does not alter this object
@@ -103,6 +107,16 @@ TVector<T>::~TVector() {
 template<typename T>
 int TVector<T>::get_size() const {
     return length;
+}
+
+template<typename T>
+T* TVector<T>::begin(TVector<T>& v) const {
+    return v.length ? &v[0] : nullptr;
+}
+
+template<typename T>
+T* TVector<T>::end(TVector<T>& v) const {
+    return v.length ? &v[length] : nullptr;
 }
 
 template<typename T>
