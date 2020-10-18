@@ -9,7 +9,7 @@ add_executable(
         braintrain/einstein/einstein.cpp
         braintrain/einstein/Vector.cpp
         braintrain/einstein/headers/Vector.h
-        braintrain/einstein/Vector_cpp20.cpp braintrain/riemann/TVector.cpp braintrain/riemann/headers/TVector.h)
+        braintrain/einstein/Vector_cpp20.cpp)
 # note that this executable uses Vector.h and Vector.cpp from einstein so they must be included here so the linker can find & link them
 add_executable(
         pythagoras
@@ -30,3 +30,7 @@ add_executable(
         braintrain/khwarizmi/headers/Complex3.h
         braintrain/khwarizmi/Vector3.cpp
         braintrain/khwarizmi/headers/Vector3.h)
+add_executable(
+        riemann
+        braintrain/riemann/headers/TVector.h
+        braintrain/riemann/riemann.cpp)
