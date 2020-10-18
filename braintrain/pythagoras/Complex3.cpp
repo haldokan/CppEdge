@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include "headers/Complex3.h"
 
 using namespace std;
@@ -21,5 +21,5 @@ Complex3& Complex3::operator+=(Complex3 c) {
 // B.S. says that this could be defined elsewhere but I got compile errors about having 3 args for the binary operator
 // so defined here it does not work with c1 + c2. I am missing some more twists in this sad api.
 Complex3 operator+ (Complex3 c1, Complex3 c2) { // passed by value so we can change in the func w/o affecting caller
-   return  c1 += c2;
+    return  c1 += c2;
 }

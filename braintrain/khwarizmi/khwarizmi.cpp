@@ -1,7 +1,7 @@
 #include <iostream>
+#include <vector>
 #include "headers/Complex3.h"
 #include "headers/Vector3.h"
-#include <vector>
 
 using namespace std;
 
@@ -75,7 +75,7 @@ void container_copy_assignment() {
     v2 = v3; // this calls the copy assign operator=
 }
 
-// required the impl of a move cntr and move assignment
+// return containers by value (relying on move for efficiency)
 Vector3 container_move_constructor() {
     cout << "==>>container_move_constructor" << endl;
     Vector3 c1 {1, 2, 3};
@@ -127,6 +127,20 @@ Vector3 copy_vs_move() {
     return v1; // the move constructor move the items managed by the v1 handle from this scope to the caller func scope
 }
 
+void vector_iteration() {
+    vector<int> v {1, 2, 3, 4};
+    for (auto i : v) {
+        cout << i << ", ";
+    }
+    cout << endl;
+
+    // above call this longer syntax:
+    for (auto p = v.begin(); p != v.end(); p++) {
+        cout << *p << ", ";
+    }
+    cout << endl;
+}
+
 int main() {
     add_complex_nums();
     struct_copy_assignment();
@@ -136,6 +150,7 @@ int main() {
     container_move_constructor_caller();
     Vector3 v = copy_vs_move();
     cout << "should be 7: " << v.get_size() << " - should be 17: "<< v[0] << endl;
+    vector_iteration();
 
     return 0;
 }
