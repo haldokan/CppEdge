@@ -13,7 +13,8 @@ TVector<string> pass_typed_vector(TVector<string>& v) {
 void create_typed_vector() {
     cout << "create_typed_vector" << endl;
     TVector<string> v = {"this", "is", "templated", "custom", "vector"};
-    // out vector impl the begin and end ops
+    // our vector impl the begin and end ops
+    cout << "print vector:" << endl;
     for (auto& val : v) {
         cout << val << ", ";
     }

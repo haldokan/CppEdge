@@ -28,10 +28,10 @@ public:
     // const signifies that this func doesn't modify its object. It can be called by const and non-const objects
     // however non-const funcs cannot be called by const objects (talk about simplicity!)
     int get_size() const;
+    // note the way B.S. implemented this is to pass TVector& but it did not work.. same for end (I think he made a mistake)
+    T* begin() const;
 
-    T* begin(TVector<T>&) const;
-
-    T* end(TVector<T>&) const;
+    T* end() const;
 
     T &operator[](int); // get the subscript and alter it if you want
 
@@ -110,13 +110,13 @@ int TVector<T>::get_size() const {
 }
 
 template<typename T>
-T* TVector<T>::begin(TVector<T>& v) const {
-    return v.length ? &v[0] : nullptr;
+T* TVector<T>::begin() const {
+    return length ? &items[0] : nullptr;
 }
 
 template<typename T>
-T* TVector<T>::end(TVector<T>& v) const {
-    return v.length ? &v[length] : nullptr;
+T* TVector<T>::end() const {
+    return length ? &items[length] : nullptr;
 }
 
 template<typename T>
