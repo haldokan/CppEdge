@@ -71,6 +71,8 @@ void structured_binding_maps() {
     map1[1] = "one";
     map1[2] = "two";
 
+    cout << "map values => " << map1[0] << " - [" << map1[17] << "]"<< endl;
+
     cout << "structured-binding-map:" << endl;
     for (auto[key, val] : map1) {
         cout << key << " - " << val << endl;
