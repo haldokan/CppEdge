@@ -93,23 +93,73 @@ void count_using_func_obj_caller() {
     cout << count_using_func_obj(v, gt) << endl;
 }
 
-void lambda_expressions() {
+template <typename sequence, typename lambda>
+int count_using_lambda(sequence &s, lambda lmda) {
+    int count = 0;
+    for (const auto &elem : s) {
+        if (lmda(elem)) {
+            count++;
+        }
+    }
+    return count;
+}
 
+void lambda_expressions() {
+    cout << "lambda_expressions" << endl;
+    TVector<int> v = {1, 2, 3, 4};
+    int x = 2;
+    // the rather ugly syntax in the 2nd arg is the definition of the gt lambda
+    cout << "lambda-ref: " << count_using_lambda(v, [&x](int elem) {return elem > x;})  << endl;// [&x] pass x by reference
+//    cout << "lambda-copy: " << count_using_lambda(v, [=x](int elem) {return elem > x;})  << endl;// [=x] pass a copy of x => compile error
+
+    cout << "lambda-all-ref: " << count_using_lambda(v, [&](int elem) {return elem > x;})  << endl;// [&x] pass all by reference
+    cout << "lambda-all-copy: " << count_using_lambda(v, [=](int elem) {return elem > x;})  << endl;// [&x] pass all by copy
+}
+
+template <typename sequence, typename lambda>
+void generic_lambda_callee(sequence &s, lambda lmda) {
+    for (auto &elem : s) {
+        cout << "generic_lambda_callee: " << lmda(s) << endl;
+    }
+}
+
+template <typename S>
+void generic_lambda(vector<S>& v) {// this garbage must be a vector of pointers but how to pass pointers to generics?
+    // not that the compiler will catch calls on elem that are not valid.
+    generic_lambda_callee(v, [](auto &elem) { return elem->imag();});
 }
 
 // value template args are permitted and it allows creating containers statically w/o accessing the heap
 template <typename T, int N>
 struct template_struct {
-    using value_type = T; // not sure what this beauty does here
+    using value_type = T; // alias type T to value_type (used in all std::collections)
     constexpr int size() { return N; }
     // T[N]; //and this gives a compilation error: Decomposition declaration not permitted in this context
 };
+
+template<typename firstT, typename secondT>
+struct my_pair {
+    firstT first;
+    secondT second;
+};
+
+template<typename T>
+my_pair<string, T> my_string_pair(string val, T second) {
+    cout << "my_string_pair" << endl;
+    // here's the aliasing
+    using string_pair = my_pair<string, T>; // sort of similar to defining a func in a closure in javascript or python
+    return string_pair {val, second};
+}
 
 int main() {
     work_with_custom_typed_vector();
     deduce_template_args();
     func_template1_caller();
     count_using_func_obj_caller();
+    lambda_expressions();
+    my_pair<string, int> p = my_string_pair("first", 3);
+    cout << p.first << " - " << p.second << endl;
+//    generic_lambda(v);
 
     return 0;
 }
