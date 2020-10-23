@@ -1,8 +1,11 @@
 #include <iostream>
-#include <iostream>
 #include <complex>
+#include <memory>
 #include <vector>
 #include "headers/TVector.h"
+#include "headers/Vehicle.h"
+#include "headers/Truck.h"
+#include "headers/Sedan.h"
 
 using namespace std;
 
@@ -151,6 +154,27 @@ my_pair<string, T> my_string_pair(string val, T second) {
     return string_pair {val, second};
 }
 
+void vehicle_specs(vector<shared_ptr<Vehicle>> &vehicles) {
+    for (shared_ptr<Vehicle> vehicle : vehicles) {
+        cout << vehicle->top_speed() << " - " << vehicle->capacity() << endl;
+    }
+}
+
+void vehicle_specs_caller() {
+    cout << "vehicle_specs_caller" << endl;
+    shared_ptr<Vehicle> truck = make_unique<Truck>(100, 6); // note that I can make unique_ptr and assign to shared_ptr (not sure of rationale)
+    shared_ptr<Vehicle> sedan = make_shared<Sedan>(120, 4);
+
+    vector<shared_ptr<Vehicle>> vehicles;
+    //  note that using unique_ptr does not work because when we push_back truck and sedan to the vector the copy constructor
+    // is called (bcz vector is now responsible for the handle and unique_ptr cannot be shared). The Truck and sedan
+    // don't implement a copy constructor and thus the call will go to a 'delete' copy constructor which is a compilation error
+    vehicles.push_back(truck);
+    vehicles.push_back(sedan);
+
+    vehicle_specs(vehicles);
+}
+
 int main() {
     work_with_custom_typed_vector();
     deduce_template_args();
@@ -159,6 +183,7 @@ int main() {
     lambda_expressions();
     my_pair<string, int> p = my_string_pair("first", 3);
     cout << p.first << " - " << p.second << endl;
+    vehicle_specs_caller();
 //    generic_lambda(v);
 
     return 0;

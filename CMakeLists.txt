@@ -33,4 +33,9 @@ add_executable(
 add_executable(
         riemann
         braintrain/riemann/headers/TVector.h
-        braintrain/riemann/riemann.cpp)
+        braintrain/riemann/riemann.cpp
+        braintrain/riemann/headers/Vehicle.h
+        braintrain/riemann/headers/Truck.h
+        braintrain/riemann/headers/Sedan.h
+        braintrain/riemann/Sedan.cpp
+        braintrain/riemann/Truck.cpp)
