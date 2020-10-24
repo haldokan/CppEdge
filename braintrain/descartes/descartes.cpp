@@ -3,8 +3,22 @@
 
 using namespace std;
 
-void read_only_string() {
-    // strings views are read-only: {point-to-start, size}
+// strings are mutable
+void mutable_string() {
+    cout << "string_is_mutable" << endl;
+    string s = "modern c++";
+
+    s[0] = toupper(s[0]);
+    cout << s << endl;
+
+    s.replace(8, 10, "pp");
+    cout << s << endl;
+
+    cout << s.substr(7, 10) << endl;
+}
+
+// strings views are immutable: {pointer-to-begin, size}
+void immutable_string() {
     string_view sv1 = "hello-"sv; // adding the sv suffix is not necessary but it helps calculating the string_view size at compile time since it is immutable
     string_view sv2 = "world"sv;
 
@@ -35,7 +49,7 @@ void read_only_string() {
     }
 }
 
-void string_style_c_cpp() {
+void string_style_c_vs_cpp() {
     cout << "string_style_c_cpp" << endl;
 
     auto s1 = "12356"; // this is c-style string: char*
@@ -50,23 +64,10 @@ void string_style_c_cpp() {
     cout << s3[0] << endl;
 }
 
-void string_is_mutable() {
-    cout << "string_is_mutable" << endl;
-    string s = "modern c++";
-
-    s[0] = toupper(s[0]);
-    cout << s << endl;
-
-    s.replace(8, 10, "pp");
-    cout << s << endl;
-
-    cout << s.substr(7, 10) << endl;
-}
-
 int main() {
-    string_is_mutable();
-    string_style_c_cpp();
-    read_only_string();
+    mutable_string();
+    string_style_c_vs_cpp();
+    immutable_string();
 
     return 0;
 }
