@@ -47,7 +47,7 @@ void create_memory_for_new_obj(const Entry e) { // e has to be passed by value f
     cout << "create_memory_for_new_obj" << endl;
     cout << e << endl;
     Entry *ep; // ptr to e
-    new (ep) Entry {e}; // init pointer to e: does not work - exit code 10 (some sort of segmentation error)
+    new (ep) Entry {e};
     ep++; // scary pointer math
 
     cout << "name: [" << ep->name << "]" << endl;
