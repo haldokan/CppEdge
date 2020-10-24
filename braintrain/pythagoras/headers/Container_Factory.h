@@ -11,7 +11,9 @@ public:
     // we could return naked pointer or ref to Container1 but that's discouraged because it leads to resource leaks if the
     // container is not deleted thru the pointer (one pitfall of c++)
     // according to B.S. Objects 'owned' by unique_ptr need no destructors as the compiler generates one for them that does what is needed
-    static unique_ptr<Container1> createContainer(initializer_list<double>, int);
+    // note that passing an Rvalue is not necessary but nice since it indicate the these params are not assignable (found this usage
+    // in an example in Effective Modern C++
+    static unique_ptr<Container1> createContainer(initializer_list<double>&&, int&&);
 };
 
 #endif //CPP_CONTAINER_FACTORY_H

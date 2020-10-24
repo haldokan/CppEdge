@@ -39,3 +39,6 @@ add_executable(
         braintrain/riemann/headers/Sedan.h
         braintrain/riemann/Sedan.cpp
         braintrain/riemann/Truck.cpp)
+add_executable(
+        descartes
+        braintrain/descartes/descartes.cpp)

@@ -163,16 +163,31 @@ void vehicle_specs(vector<shared_ptr<Vehicle>> &vehicles) {
 void vehicle_specs_caller() {
     cout << "vehicle_specs_caller" << endl;
     shared_ptr<Vehicle> truck = make_unique<Truck>(100, 6); // note that I can make unique_ptr and assign to shared_ptr (not sure of rationale)
-    shared_ptr<Vehicle> sedan = make_shared<Sedan>(120, 4);
+    auto sedan = make_shared<Sedan>(120, 4); // using auto here just to show that the compiler can figure out the variable type
 
     vector<shared_ptr<Vehicle>> vehicles;
-    //  note that using unique_ptr does not work because when we push_back truck and sedan to the vector the copy constructor
-    // is called (bcz vector is now responsible for the handle and unique_ptr cannot be shared). The Truck and sedan
-    // don't implement a copy constructor and thus the call will go to a 'delete' copy constructor which is a compilation error
+    // this does not work if we use unique_ptr bcz vector.push_back(unique_ptr) will try to make a copy of the unique pointer (not referenced value)
+    // which is disallowed bcz, well, they are unique!
     vehicles.push_back(truck);
     vehicles.push_back(sedan);
 
     vehicle_specs(vehicles);
+}
+
+void using_lambda_as_initializer(int selector) {
+    cout << "using_lambda_as_initializer" << endl;
+    vector<int> default_vec{1, 2, 3};
+    int default_size = 2;
+
+    vector<int> v = [&] { // everything inside lambda is captured by ref including selector, default_vec and default_size
+        switch (selector) {
+            case 1:
+                return default_vec;
+            case 2:
+                return vector<int>(default_size);
+        }
+    }();
+    cout << v[0] << endl;
 }
 
 int main() {
@@ -184,6 +199,7 @@ int main() {
     my_pair<string, int> p = my_string_pair("first", 3);
     cout << p.first << " - " << p.second << endl;
     vehicle_specs_caller();
+    using_lambda_as_initializer(1);
 //    generic_lambda(v);
 
     return 0;
