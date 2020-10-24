@@ -41,4 +41,7 @@ add_executable(
         braintrain/riemann/Truck.cpp)
 add_executable(
         descartes
-        braintrain/descartes/descartes.cpp)
+        braintrain/descartes/descartes.cpp braintrain/plato/plato.cpp)
+add_executable(
+        plato
+        braintrain/plato/plato.cpp)
