@@ -42,7 +42,7 @@ void deduce_template_args() {
 
     // we can do that with our custom vector
     auto v = new TVector {7, 2, 3}; // TVector of type int
-//    cout << "v[0] = " <<  v[0] << endl; for some stupid reason v[0] does not seem a value we can print
+//    cout << "v[0] = " <<  v[0] << endl; for //some stupid reason v[0] does not seem a value we can print
 }
 
 //A function template can be a member function, but not a virtual member
@@ -74,7 +74,7 @@ class function_object_gt {
 private:
     const T t;
 public:
-    function_object_gt(T arg): t {arg} {}
+    explicit function_object_gt(T arg): t {arg} {}
     bool operator() (const T val) const { return val > t;} // func call operator()
 };
 
@@ -148,7 +148,7 @@ struct my_pair {
 };
 
 template<typename T>
-my_pair<string, T> my_string_pair(string val, T second) {
+my_pair<string, T> my_string_pair(const string& val, T second) {
     cout << "my_string_pair" << endl;
     // here's the aliasing
     using string_pair = my_pair<string, T>; // sort of similar to defining a func in a closure in javascript or python
@@ -156,7 +156,7 @@ my_pair<string, T> my_string_pair(string val, T second) {
 }
 
 void vehicle_specs(vector<shared_ptr<Vehicle>> &vehicles) {
-    for (shared_ptr<Vehicle> vehicle : vehicles) {
+    for (const shared_ptr<Vehicle>& vehicle : vehicles) {
         cout << vehicle->top_speed() << " - " << vehicle->capacity() << endl;
     }
 }
@@ -186,6 +186,8 @@ void using_lambda_as_initializer(int selector) {
                 return default_vec;
             case 2:
                 return vector<int>(default_size);
+            default:
+                throw invalid_argument {"invalid selector: " + to_string(selector)};
         }
     }();
     cout << v[0] << endl;
