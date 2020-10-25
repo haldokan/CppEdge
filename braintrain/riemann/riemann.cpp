@@ -41,8 +41,8 @@ void deduce_template_args() {
     cout << "first = " << p3.first << ", second = " << p3.second << endl;
 
     // we can do that with our custom vector
-    auto v = new TVector {7, 2, 3}; // TVector of type int
-//    cout << "v[0] = " <<  v[0] << endl; for //some stupid reason v[0] does not seem a value we can print
+    auto v = TVector {7, 2, 3}; // TVector of type int
+    cout << "v[0] = " <<  v[0] << endl;
 }
 
 //A function template can be a member function, but not a virtual member

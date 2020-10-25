@@ -17,17 +17,17 @@ public:
 
     TVector(const TVector&); //copy-cntr
 
-    TVector(TVector&&); // move-cntr
+    TVector(TVector&&) noexcept; // move-cntr
 
     ~TVector();
 
     TVector &operator=(const TVector&); // copy assignment
 
-    TVector &operator=(TVector&&); // move assignment
+    TVector &operator=(TVector&&) noexcept; // move assignment
 
     // const signifies that this func doesn't modify its object. It can be called by const and non-const objects
     // however non-const funcs cannot be called by const objects (talk about simplicity!)
-    int get_size() const;
+    [[nodiscard]] int get_size() const;
     // note the way B.S. implemented this is to pass TVector& but it did not work.. same for end (I think he made a mistake)
     T* begin() const;
 
@@ -66,14 +66,14 @@ TVector<T>::TVector(const TVector<T> & v): length {v.length}, items {new T[v.len
 }
 
 template<typename T>
-TVector<T>::TVector(TVector<T> &&v): length {v.length}, items {v.items} { // move cntr
+TVector<T>::TVector(TVector<T> &&v) noexcept: length {v.length}, items {v.items} { // move cntr
     cout << "TVector-move-cntr is called" << endl;
     v.length = 0;
     v.items = nullptr;
 }
 
 template<typename T>
-TVector<T> &TVector<T>::operator=(TVector<T> &&v) { // move-assignment
+TVector<T> &TVector<T>::operator=(TVector<T> &&v) noexcept { // move-assignment
     cout << "TVector-move-assign is called" << endl;
     delete [] items;
     length = v.length;
@@ -87,6 +87,9 @@ TVector<T> &TVector<T>::operator=(TVector<T> &&v) { // move-assignment
 template<typename T>
 TVector<T> &TVector<T>::operator=(const TVector<T> &v) { // copy-assignment
     cout << "TVector-copy-assign is called" << endl;
+    if (v == this) {
+        return *this;
+    }
     T* old = items;
 
     items = new T[v.length];
