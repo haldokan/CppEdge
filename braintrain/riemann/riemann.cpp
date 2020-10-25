@@ -92,7 +92,7 @@ int count_using_func_obj(sequence &s, predicate p) {
 void count_using_func_obj_caller() {
     cout << "count_using_func_obj_caller" << endl;
     TVector<int> v = {1, 2, 3, 4};
-//    function_object_gt<int> gt (2); // predicate - note that both type of initialization (2) or {2} work. It doesn't always (typical c++)
+//    function_object_gt<int> gt (2); // predicate - note that both type of initialization (2) or {2} work (the class init mess)
     function_object_gt<int> gt {2}; // predicate
     cout << count_using_func_obj(v, gt) << endl;
 }
