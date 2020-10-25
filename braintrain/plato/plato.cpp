@@ -124,17 +124,19 @@ void ordered_map() {
     }
 }
 
+namespace std { // inject the Entry hash func in std namespace
 //we define Entry hash as a specialization of the standard-library hash:
-template<> // note that struct Entry has to implement operator== for hash to work (for obvious reasons)
-struct hash<Entry> {
-    using argument_type = Entry;
-    using result_type = size_t;
+    template<> // note that struct Entry has to implement operator== for hash to work (for obvious reasons)
+    struct hash<Entry> {
+        using argument_type = Entry;
+        using result_type = size_t;
 
-    size_t operator()(const Entry &e) const {
-        // note that hash is an object func: class that can be called as a func
-        return hash<string>()(e.name) ^ hash<int>()(e.number); // using the bracket { e.name } initialization here does not work
-    }
-};
+        size_t operator()(const Entry &e) const {
+            // note that hash is an object func: class that can be called as a func (not how we init {} then call with its operator() params)
+            return hash<string>{} (e.name) ^ hash<int>{} (e.number);
+        }
+    };
+}
 
 // the pedestrian way to define Entry hash (has to be passed as an argument to the map, set, etc.)
 struct Entry_Hash {
