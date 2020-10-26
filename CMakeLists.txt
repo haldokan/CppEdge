@@ -45,3 +45,6 @@ add_executable(
 add_executable(
         plato
         braintrain/plato/plato.cpp)
+add_executable(
+        darwin
+        braintrain/darwin/darwin.cpp)
