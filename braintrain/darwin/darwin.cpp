@@ -38,7 +38,7 @@ void sort_vector() {
     }
 }
 
-list<Planet> copy_vector_to_list(vector<Planet> &planets) {
+list<Planet> copy_vector_to_other_containers(vector<Planet> &planets) {
     list<Planet> planet_list1;
     //The call back_inserter(planet_list1) constructs an iterator for res that adds elements at the end of a container, extending
     // the container to make room for them. This saves us from first having to allocate a fixed amount of space and then filling it.
@@ -52,11 +52,18 @@ list<Planet> copy_vector_to_list(vector<Planet> &planets) {
     }
     cout << endl;
 
+    vector<Planet> planet_vec; // back_inserter works for vector (I think it works for all compatible containers)
+    copy(planets.begin(), planets.end(), back_inserter(planet_vec));
+    for (auto &planet : planet_vec) {
+        cout << planet;
+    }
+    cout << endl;
+
     return planet_list1; // list has a move cntr so we can return by value
 }
 
-void copy_vector_to_list_caller() {
-    cout << "copy_vector_to_list_caller" << endl;
+void copy_vector_to_other_containers_caller() {
+    cout << "copy_vector_to_other_containers_caller" << endl;
     vector<Planet> planets = {
             {"Jupiter", 70},
             {"Mars",    15},
@@ -64,7 +71,7 @@ void copy_vector_to_list_caller() {
             {"Earth",   20},
             {"Jupiter",   30}
     };
-    auto planet_list = copy_vector_to_list(planets);
+    auto planet_list = copy_vector_to_other_containers(planets);
     for (auto &planet : planet_list) { // note that Mars is listed only once (adjacent) but Jupiter listed twice
         cout << planet << endl;
     }
@@ -72,7 +79,7 @@ void copy_vector_to_list_caller() {
 
 int main() {
     sort_vector();
-    copy_vector_to_list_caller();
+    copy_vector_to_other_containers_caller();
 
     return 0;
 }
