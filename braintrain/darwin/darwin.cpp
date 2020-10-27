@@ -43,7 +43,7 @@ void find_item_in_vector(vector<Planet> &planets) {
     }
 }
 
-//  // note that marking input as const will prevent adding the char (ptr) to the vector which enables clients to modify the string
+// note that marking input as const will prevent adding the char (ptr) to the vector which enables clients to modify the string
 vector<string::iterator> find_all_chars_in_string(string &input, const char chr) {
     vector<string::iterator> res;
     for (auto p = input.begin(); p != input.end(); p++) {
@@ -93,8 +93,22 @@ list<Planet> copy_vector_to_other_containers(vector<Planet> &planets) {
 }
 
 template <typename T, typename V>
-vector<typename T::iterator> find_all_items_in_container(T &input, const V v) {
+vector<typename T::iterator> find_all_items_in_container_version1(T &input, const V v) {
     vector<typename T::iterator> res;
+    for (auto p = input.begin(); p != input.end(); p++) {
+        if (*p == v) {
+            res.push_back(p);
+        }
+    }
+    return res;
+}
+
+// introduce type alias to avoid using typename in vector declaration
+template <typename N>
+using Iterator = typename N::iterator;
+template <typename T, typename V>
+vector<Iterator<T>> find_all_items_in_container_version2(T &input, const V v) {
+    vector<Iterator<T>> res;
     for (auto p = input.begin(); p != input.end(); p++) {
         if (*p == v) {
             res.push_back(p);
@@ -107,7 +121,7 @@ void find_all_items_in_container_caller() {
     cout << "find_all_items_in_container_caller" << endl;
     string scorpion = {"scorpion"};
 
-    vector<string::iterator> res = find_all_items_in_container(scorpion, 'o');
+    vector<string::iterator> res = find_all_items_in_container_version1(scorpion, 'o');
     for (auto valPtr : res) {
         cout << *valPtr << "-";
     }
@@ -116,13 +130,13 @@ void find_all_items_in_container_caller() {
     // we can do that with any container type
     vector<string> scorpion2 = {"sc", "or", "pi", "n", "or", "bee"};
     // I can se auto instead of this long type but it is good to know how the stuff works
-    vector<vector<string>::iterator> res2 = find_all_items_in_container(scorpion2, "or");
+    vector<vector<string>::iterator> res2 = find_all_items_in_container_version1(scorpion2, "or");
     cout << *res2[0] << endl; // seems iterators can be accessed by subscript
     cout << *res2[1] << endl;
 
     // singly linked list (unlike 'list' which is a doubly linked list)
     forward_list<string> scorpion3 = {"sc", "or", "pi", "n", "or", "pi"};
-    vector<forward_list<string>::iterator> res3 = find_all_items_in_container(scorpion3, "pi");
+    vector<forward_list<string>::iterator> res3 = find_all_items_in_container_version2(scorpion3, "pi"); // call version2
     cout << *res3[0] << endl; // seems iterators can be accessed by subscript
     cout << *res3[1] << endl;
 }
