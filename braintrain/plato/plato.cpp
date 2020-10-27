@@ -63,7 +63,7 @@ void vector_is_range_unchecked() {
         cout << "out_of_range: " << e.what() << endl;
     }
     // or we can rely on iterators
-    for (auto entry : v) {
+    for (auto &entry : v) {
         cout << entry << endl;
     }
 }
@@ -132,7 +132,7 @@ namespace std { // inject the Entry hash func in std namespace
         using result_type = size_t;
 
         size_t operator()(const Entry &e) const {
-            // note that hash is an object func: class that can be called as a func (not how we init {} then call with its operator() params)
+            // note that hash is an object func: class that can be called as a func (note how we init {} then call with its operator() params)
             return hash<string>{} (e.name) ^ hash<int>{} (e.number);
         }
     };
@@ -146,7 +146,7 @@ struct Entry_Hash {
     }
 };
 
-//unordered map: std lib provide hash funcs for built-in types
+//unordered map: std lib provides hash funcs for built-in types
 void hash_table() {
     cout << "hash_table" << endl;
     unordered_map<string, int> map = {{"Susan", 30}, {"Jane", 42}, {"John", 45}};
