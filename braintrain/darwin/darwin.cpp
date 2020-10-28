@@ -2,8 +2,11 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <set>
+#include <map>
 #include <iterator>
 #include <forward_list>
+#include <fstream>
 
 using namespace std;
 
@@ -16,6 +19,26 @@ struct Planet {
     }
 };
 
+struct greater_than {
+    int val;
+    explicit greater_than(int val) : val(val) {}
+    bool operator()(const pair<string, int> &pair1) const { return pair1.second > val; }
+};
+
+// per B.S we can make container algos nicer by abstracting ranges
+namespace estd { // extended std
+    using namespace std;
+
+    template <typename T>
+    void sort(T &t) {
+        sort(t.begin(), t.end());
+    }
+
+    template <typename T, typename P>
+    auto find_if(T &t, P pred) {
+        return find_if(t.begin(), t.end(), pred); // not that we pass the predicate by value because it is an object func to be called on - won't compile if we pass it by ref
+    }
+}
 // B.S defines this operator outside the struct conforming to his advise of defining operations not essential to a data
 // structure outside the data-structure so as no to increase its size and to avoid forcing relinking code that uses the data
 // structure because of these changes.
@@ -100,7 +123,7 @@ vector<typename T::iterator> find_all_items_in_container_version1(T &input, cons
             res.push_back(p);
         }
     }
-    return res;
+    return res; // we can return vector by value bcz is impl a move cntr
 }
 
 // introduce type alias to avoid using typename in vector declaration
@@ -114,7 +137,7 @@ vector<Iterator<T>> find_all_items_in_container_version2(T &input, const V v) {
             res.push_back(p);
         }
     }
-    return res;
+    return res; // we can return vector by value bcz it impl a move cntr & assignment
 }
 
 void find_all_items_in_container_caller() {
@@ -134,7 +157,7 @@ void find_all_items_in_container_caller() {
     cout << *res2[0] << endl; // seems iterators can be accessed by subscript
     cout << *res2[1] << endl;
 
-    // singly linked list (unlike 'list' which is a doubly linked list)
+    // singly linked list (unlike 'list' which is a doubly linked)
     forward_list<string> scorpion3 = {"sc", "or", "pi", "n", "or", "pi"};
     vector<forward_list<string>::iterator> res3 = find_all_items_in_container_version2(scorpion3, "pi"); // call version2
     cout << *res3[0] << endl; // seems iterators can be accessed by subscript
@@ -156,6 +179,113 @@ void copy_vector_to_other_containers_caller() {
     }
 }
 
+// example of how we can use unique_ptr to transfer ownership for container elements
+vector<unique_ptr<Planet>> get_planets() {
+    vector<unique_ptr<Planet>> planets;
+    planets.push_back(make_unique<Planet>(Planet {"Mars", 17}));
+    planets.push_back(make_unique<Planet>(Planet{"Earth", 7}));
+    return planets; //contents are moved (not copied) even tho we are returning the vector by value
+}
+
+void get_planets_caller() {
+    cout << "get_planets_caller" << endl;
+    vector<unique_ptr<Planet>> planets = get_planets();
+    for (auto &planet : planets) {
+        cout << *planet << endl;
+    }
+}
+
+void stream_iterators() {
+    cout << "stream_iterators" << endl;
+    ostream_iterator<Planet> ostream {cout}; // similar to OutputStream out = new FileOutputStream("file")
+    *ostream = Planet {"Mercury", 7}; // works also by assigning to 'ostream' (not sure of the difference)
+    ostream++;
+    *ostream = Planet {"Earth", 2};
+    cout << endl;
+}
+
+int read_from_write_to_file() {
+    cout << "read_from_write_to_file" << endl;
+    // we can read the soruce and target files form cin but that would halt for user input:
+    // cin >> source >> target;
+    // instead we specify them in in the code
+    string source {"/Users/haldokanji/misc/cpp-test-file.txt"}; // does not understand '~' to refer to home directory
+
+    ifstream in_stream {source};
+    if (!in_stream) { // if file is not found c++ fails silently (sweet!) so we have to do the check explicitly
+        cout << "could not open file: " << source;
+        return EXIT_FAILURE; // we have also EXIT_SUCCESS
+    }
+    // I could have inlined these 2 iterators in the 'set' initialization below
+    istream_iterator<string> in_stream_itr { in_stream };
+    istream_iterator<string> in_stream_itr_sentinel {}; // this is c++ clunky way of defining an iterator (ptr) to mark end of input
+
+    // set is ordered and unique (we have also unordered_set)
+    set<string> file_data_buffer {in_stream_itr, in_stream_itr_sentinel};
+    for (auto &itr : file_data_buffer) {
+        cout << itr << " - ";
+    }
+    cout << endl;
+
+    string target {"/Users/haldokanji/misc/cpp-test-file.out"};
+    ofstream out_stream {target};
+    ostream_iterator<string> out_stream_itr {out_stream, "\n"}; // the 2nd param is the eol char
+    copy(file_data_buffer.begin(), file_data_buffer.end(), out_stream_itr);
+
+    //ifstream.eof() returns 1 (true) if eof is reached (same for ofstream)
+    return !in_stream.eof() || !out_stream; // out_stream.eof() returns 0 which means the eof was not reached. Wonder why B.S. used !out_stream here
+}
+
+// map is equivalent to Java TreeMap. We also have unordered_map which is more like HashMap.
+void predicates_with_lambda(map<string, int> planets) {
+    int x = 16;
+    // we can use auto instead of 'pair' in lambda
+    // find_if returns iterator to the first element satisfying the condition or last if no such element is found: map<string,int>::iterator
+    // it is encouraged to use auto for iterators (at least the clang-tidy points that out and Mr. B.S does that consistently)
+    auto found = find_if(planets.begin(), planets.end(), [&x] (const pair<const string, int> &entry) { return entry.second > x; });
+    if (found != planets.end()) {
+        cout << found->first << " - " << found->second << endl;
+    } else {
+        cout << "not found" << endl;
+    }
+}
+
+void predicates_with_obj_func(map<string, int> planets) {
+    int x = 16;
+    // we can use auto instead of 'pair' in lambda
+    // find_if returns iterator to the first element satisfying the condition or last if no such element is found: map<string,int>::iterator
+    // it is encouraged to use auto for iterators (at least the clang-tidy points that out and Mr. B.S does that consistently)
+    auto found = find_if(planets.begin(), planets.end(), greater_than {x});
+    if (found != planets.end()) {
+        cout << found->first << " - " << found->second << endl;
+    } else {
+        cout << "not found" << endl;
+    }
+}
+
+void predicates_with_obj_func_wrapped(map<string, int> planets) {
+    int x = 16;
+    // we can use auto instead of 'pair' in lambda
+    // find_if returns iterator to the first element satisfying the condition or last if no such element is found: map<string,int>::iterator
+    // it is encouraged to use auto for iterators (at least the clang-tidy points that out and Mr. B.S does that consistently)
+    estd::sort(planets);
+    // we cann the estd::find_if
+    auto found = estd::find_if(planets, greater_than {x});
+    if (found != planets.end()) {
+        cout << found->first << " - " << found->second << endl;
+    } else {
+        cout << "not found" << endl;
+    }
+}
+
+void predicates_caller() {
+    cout << "predicates_caller" << endl;
+    predicates_with_lambda(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
+    predicates_with_obj_func(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
+    // todo: does not compile - fix
+    predicates_with_obj_func_wrapped(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
+}
+
 int main() {
     vector<Planet> planets = {
             {"Jupiter", 70},
@@ -168,6 +298,10 @@ int main() {
     find_item_in_vector(planets);
     find_all_char_in_string_caller();
     find_all_items_in_container_caller();
+    get_planets_caller();
+    stream_iterators();
+    cout << read_from_write_to_file() << endl;
+    predicates_caller();
 
     return 0;
 }

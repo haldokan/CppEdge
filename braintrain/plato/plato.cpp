@@ -4,7 +4,6 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
-#include <unordered_set>
 
 using namespace std;
 
@@ -119,8 +118,14 @@ void ordered_map() {
     cout << itr3->first << " - " << itr3->second << " - " << success3 << endl;
 
     cout << "in-order traverse" << endl;
-    for (auto &entry_itr : map) { // the traverse does not list the keys inserted using subscripts or non-existing keys! Nice, but inconsistent
+    for (auto &entry_itr : map) {
         cout << entry_itr.first << " - " << entry_itr.second << endl;
+    }
+
+    // the auto type in the for loop above is actually pair<const string, int>; not the const in the pair (the map insures that callers cannot modify the key)
+    cout << "in-order2 traverse" << endl;
+    for (pair<const string, int> &pair1 : map) {
+        cout << pair1.first << " - " << pair1.second << endl;
     }
 }
 
