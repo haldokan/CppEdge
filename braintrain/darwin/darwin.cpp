@@ -20,11 +20,19 @@ struct Planet {
 };
 
 template <typename T, typename V>
+struct greater_than_map {
+    V val;
+    explicit greater_than_map(V v) : val {v} {}
+    bool operator()(const pair<T, V> &pair1) const { return pair1.second > val; }
+};
+
+template <typename T, typename V>
 struct greater_than {
     V val;
     explicit greater_than(V v) : val {v} {}
-    bool operator()(const pair<T, V> &pair1) const { return pair1.second > val; }
+    bool operator()(const T &t) const { return t.diameter > val; }
 };
+
 
 // per B.S we can make container algos nicer by abstracting ranges
 namespace estd { // extended std
@@ -36,8 +44,8 @@ namespace estd { // extended std
     }
 
     template <typename T, typename P>
-    auto find_if(T &t, P pred) {
-        return find_if(t.begin(), t.end(), pred); // not that we pass the predicate by value because it is an object func to be called on - won't compile if we pass it by ref
+    auto find_if(T &t, P pred) { // find_if returns an iterator to the *first* element matching the predicate
+        return find_if(t.begin(), t.end(), pred); // note that we pass the predicate by value because it is an object func to be called on - won't compile if we pass it by ref
     }
 }
 // B.S defines this operator outside the struct conforming to his advise of defining operations not essential to a data
@@ -256,7 +264,7 @@ void predicates_with_obj_func(map<string, int> planets) {
     // we can use auto instead of 'pair' in lambda
     // find_if returns iterator to the first element satisfying the condition or last if no such element is found: map<string,int>::iterator
     // it is encouraged to use auto for iterators (at least the clang-tidy points that out and Mr. B.S does that consistently)
-    auto found = find_if(planets.begin(), planets.end(), greater_than<string, int> {x});
+    auto found = find_if(planets.begin(), planets.end(), greater_than_map<string, int> {x});
     if (found != planets.end()) {
         cout << found->first << " - " << found->second << endl;
     } else {
@@ -264,16 +272,20 @@ void predicates_with_obj_func(map<string, int> planets) {
     }
 }
 
-void predicates_with_obj_func_wrapped(map<string, int> planets) {
+void predicates_with_obj_func_wrapped(vector<Planet> &planets) {
+    cout << "predicates_with_obj_func_wrapped" << endl;
     int x = 16;
-    // we can use auto instead of 'pair' in lambda
-    // find_if returns iterator to the first element satisfying the condition or last if no such element is found: map<string,int>::iterator
-    // it is encouraged to use auto for iterators (at least the clang-tidy points that out and Mr. B.S does that consistently)
     estd::sort(planets);
-    // we cann the estd::find_if
-    auto found = estd::find_if(planets, greater_than<string, int> {x});
-    if (found != planets.end()) {
-        cout << found->first << " - " << found->second << endl;
+    cout << "est::sort" << endl;
+    for (auto &planet : planets) {
+        cout << planet << endl;
+    }
+
+    // 'auto' here is actually vector<Planet>::iterator. Using auto is preferred Clang-Tidy gives warning for using explicit type for iterators
+    auto found_itr = estd::find_if(planets, greater_than<Planet, int> {x});
+    cout << "estd::find_if" << endl;
+    if (found_itr != planets.end()) {
+        cout << *found_itr << endl;
     } else {
         cout << "not found" << endl;
     }
@@ -283,8 +295,6 @@ void predicates_caller() {
     cout << "predicates_caller" << endl;
     predicates_with_lambda(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
     predicates_with_obj_func(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
-    // todo: does not compile - fix
-//    predicates_with_obj_func_wrapped(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
 }
 
 int main() {
@@ -303,6 +313,7 @@ int main() {
     stream_iterators();
     cout << read_from_write_to_file() << endl;
     predicates_caller();
+    predicates_with_obj_func_wrapped(planets);
 
     return 0;
 }

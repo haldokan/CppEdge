@@ -48,3 +48,7 @@ add_executable(
 add_executable(
         darwin
         braintrain/darwin/darwin.cpp)
+add_executable(
+        feynman
+        braintrain/feynman/feynman.cpp
+)
