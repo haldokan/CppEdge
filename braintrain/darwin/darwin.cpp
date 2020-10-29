@@ -19,10 +19,11 @@ struct Planet {
     }
 };
 
+template <typename T, typename V>
 struct greater_than {
-    int val;
-    explicit greater_than(int val) : val(val) {}
-    bool operator()(const pair<string, int> &pair1) const { return pair1.second > val; }
+    V val;
+    explicit greater_than(V v) : val {v} {}
+    bool operator()(const pair<T, V> &pair1) const { return pair1.second > val; }
 };
 
 // per B.S we can make container algos nicer by abstracting ranges
@@ -255,7 +256,7 @@ void predicates_with_obj_func(map<string, int> planets) {
     // we can use auto instead of 'pair' in lambda
     // find_if returns iterator to the first element satisfying the condition or last if no such element is found: map<string,int>::iterator
     // it is encouraged to use auto for iterators (at least the clang-tidy points that out and Mr. B.S does that consistently)
-    auto found = find_if(planets.begin(), planets.end(), greater_than {x});
+    auto found = find_if(planets.begin(), planets.end(), greater_than<string, int> {x});
     if (found != planets.end()) {
         cout << found->first << " - " << found->second << endl;
     } else {
@@ -270,7 +271,7 @@ void predicates_with_obj_func_wrapped(map<string, int> planets) {
     // it is encouraged to use auto for iterators (at least the clang-tidy points that out and Mr. B.S does that consistently)
     estd::sort(planets);
     // we cann the estd::find_if
-    auto found = estd::find_if(planets, greater_than {x});
+    auto found = estd::find_if(planets, greater_than<string, int> {x});
     if (found != planets.end()) {
         cout << found->first << " - " << found->second << endl;
     } else {
@@ -283,7 +284,7 @@ void predicates_caller() {
     predicates_with_lambda(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
     predicates_with_obj_func(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
     // todo: does not compile - fix
-    predicates_with_obj_func_wrapped(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
+//    predicates_with_obj_func_wrapped(map<string, int> {{"Jupiter", 70}, {"Mars",    15}, {"Earth",   17}});
 }
 
 int main() {
