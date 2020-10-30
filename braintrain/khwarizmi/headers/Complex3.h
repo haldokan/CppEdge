@@ -17,7 +17,7 @@ public:
 
     [[nodiscard]] double imag() const;
 
-    Complex3& operator+=(Complex3 c);
+    Complex3& operator+=(Complex3 &c);
 
     Complex3& operator*=(Complex3 c1); // concrete class does not have to implement all header funcs
 };

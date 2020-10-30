@@ -15,17 +15,17 @@ public:
 
     Vector3(const Vector3&); //copy-cntr
 
-    Vector3(Vector3&&); // move-cntr
+    Vector3(Vector3&&) noexcept ; // move-cntr
 
     ~Vector3();
 
     Vector3 &operator=(const Vector3&); // copy assignment
 
-    Vector3 &operator=(Vector3&&); // move assignment
+    Vector3 &operator=(Vector3&&) noexcept ; // move assignment
 
     // const signifies that this func doesn't modify its object. It can be called by const and non-const objects
     // however non-const funcs cannot be called by const objects (talk about simplicity!)
-    int get_size() const;
+    [[nodiscard]] int get_size() const;
 
     double &operator[](int); // get the subscript and alter it if you want
 

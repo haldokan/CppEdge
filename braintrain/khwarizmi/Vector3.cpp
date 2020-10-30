@@ -24,13 +24,13 @@ Vector3::Vector3(const Vector3 & v): length {v.length}, items {new double[v.leng
     }
 }
 
-Vector3::Vector3(Vector3 &&v): length {v.length}, items {v.items} { // move cntr
+Vector3::Vector3(Vector3 &&v) noexcept: length {v.length}, items {v.items} { // move cntr
     cout << "Vector3-move-cntr is called" << endl;
     v.length = 0;
     v.items = nullptr;
 }
 
-Vector3 &Vector3::operator=(Vector3 &&v) { // move-assignment
+Vector3 &Vector3::operator=(Vector3 &&v) noexcept { // move-assignment
     cout << "Vector3-move-assign is called" << endl;
     delete [] items;
     length = v.length;
@@ -41,6 +41,7 @@ Vector3 &Vector3::operator=(Vector3 &&v) { // move-assignment
     return *this;
 }
 
+// handle self-assign
 Vector3 &Vector3::operator=(const Vector3 &v) { // copy-assignment
     cout << "Vector3-copy-assign is called" << endl;
     double* old = items;

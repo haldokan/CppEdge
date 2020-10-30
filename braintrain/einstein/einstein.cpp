@@ -57,7 +57,7 @@ void default_arg(int v1, int v2 = 10) {
 
 void structured_binding_struct() {
     // can do structured binding on struct values
-    Vector01 vec3;
+    Vector01 vec3 {};
     init_vector(vec3, 3);
     vec3.items[0] = 7.2;
 
@@ -84,7 +84,7 @@ void structured_binding_classes() {
     cout << cnum.real() << "-" << cnum.imag() << endl;
     /*A complex has two data members, but its interface consists of access functions, such as real() and imag().
      * Mapping a complex<double> to two local variables, such as re and im is feasible and efficient, but the technique
-     * for doing so is beyond the scope of this braintrain.*/
+     * for doing so is beyond the scope of this exercise.*/
 //    auto [re, im] = cnum + 7.1;
 };
 

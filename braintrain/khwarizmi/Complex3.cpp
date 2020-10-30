@@ -13,9 +13,9 @@ Complex3::Complex3(Complex3& c3): rl(c3.rl), img(c3.img) {cout << "Complex3 - co
 // the const specifier on the function returning the real part indicates that this function does not modify the object for which they are called
 double Complex3::real() const { return rl; }
 
-double Complex3::imag() const { return img; } // not marked const for testing from driver
+double Complex3::imag() const { return img; }
 
-Complex3& Complex3::operator+=(Complex3 c) { // calls copy-cntr for the value in arg: pass by value trigger the copy-cntr to copy the value
+Complex3& Complex3::operator+=(Complex3 &c) { // calls copy-cntr for the value in arg: pass by value trigger the copy-cntr to copy the value
     cout << "copy-cntr is called before operator code runs" << endl;
     rl += c.real();
     img += c.imag();
