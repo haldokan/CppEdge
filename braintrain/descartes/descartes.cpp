@@ -30,7 +30,7 @@ void immutable_string() {
     string_view sv3 = {&s3[2], 5};
     cout << sv3 << endl;
 
-    // iterate over sv chars (we can also do that we string)
+    // iterate over sv chars (we can also do that with string)
     for (char c : sv1) {
         cout << "[" << c << "]";
     }
