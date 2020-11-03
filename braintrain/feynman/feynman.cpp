@@ -9,6 +9,8 @@
 #include <bitset>
 #include <map>
 #include <algorithm>
+#include <variant>
+#include <any>
 
 using namespace std;
 
@@ -282,8 +284,64 @@ void pair_assign_and_compare() {
     cout << (pair4 > pair5) << endl; // prints 1 since first is equal and second has larger population for pair4
 }
 
-void tuple_example_and_the_horror() {
+// I look at this ugly api and wonder how it ever passed muster with whoever admit features to c++
+void tuple_example() {
+    //B.S: when code doesn’t need to be generic, a simple struct with named members often leads to more maintainable code.
+    cout << "tuple_example" << endl;
+    tuple<City, string, int> tuple1 {City {"nyc", 4}, "soho", 9};
+    cout << get<0>(tuple1) << endl;
+    cout << get<string>(tuple1) << endl; // only if there is only on string val in tuple
+    // set value in tuple
+    get<1>(tuple1) = "midtown"; // using get to update value... someone shoot me now please!
+    cout << get<1>(tuple1) << endl;
+}
 
+// one possible use case is returning a value from a func or an error
+variant<string, int> variant_example() {
+    variant<string, int> v1 {"nyc"};
+    if (holds_alternative<string>(v1)) {
+        cout << get<string>(v1) << endl;
+        return "hello nyc"; //mapped to the string part of the variant
+    }
+    return 733; // mapped to the int part of variant
+}
+
+// far cry from the elegance of java or guava Optional
+optional<string> optional_example(int i) {
+    optional<string> opt = {"boston"};
+    cout << *opt << endl; // not the (*): an optional is a pointer to its type
+    optional<int> opt2 = {}; // this is the optional that points to nullptr
+
+    if (i >= 0) {
+        return "positive"; // will be wrapped in optional;
+    }
+    return {}; // optional to nullptr; trying to access undefined optional is undefined: wont throw
+}
+
+void optional_example_caller() {
+    optional<string> opt = optional_example(2);
+    if (opt) {
+        cout << "tested " << *opt << endl; // again note the (*): optional is a ptr to its type
+    } else {
+        cout << "nullptr" << endl;
+    }
+}
+// any can hold an object of any type
+any any_example(int i) {
+    if (i < 0) {
+        return "negative"s; // the literal (s) is needed for the caller to identify the string type
+    }
+    return 731;
+}
+
+void any_example_caller() {
+    auto a1 = any_example(-1);
+    const string &s = any_cast<string>(a1); // how to check for the type of this sucker before calling?
+    cout << s << endl;
+
+    any a2 = any_example(1);
+    const int &i = any_cast<int>(a2);
+    cout << i << endl;
 }
 
 int main() {
@@ -298,6 +356,10 @@ int main() {
     bitset_example();
     pair_example();
     pair_assign_and_compare();
+    tuple_example();
+    cout << get<string>(variant_example()) << endl; // since int is not set, we get an error of we do get<int>: std::bad_variant_access
+    optional_example_caller();
+    any_example_caller();
 
     return 0;
 }

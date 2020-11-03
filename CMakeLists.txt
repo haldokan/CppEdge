@@ -50,5 +50,7 @@ add_executable(
         braintrain/darwin/darwin.cpp)
 add_executable(
         feynman
-        braintrain/feynman/feynman.cpp
-)
+        braintrain/feynman/feynman.cpp)
+add_executable(
+        kubernetes
+        braintrain/kubernetes/kubernetes.cpp)
