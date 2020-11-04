@@ -4,6 +4,8 @@
 #include <cmath>
 #include <cerrno>
 #include <numeric>
+#include <random>
+#include <valarray>
 
 using namespace std;
 
@@ -43,7 +45,7 @@ void allocator_example() {
 // calendars, and time zones, is being added to the standard for C++20.
 void time_example() {
     using namespace chrono;
-    auto t1 = high_resolution_clock::now(); // now is in name sapce high_resolution_clock
+    auto t1 = high_resolution_clock::now(); // now is in name space high_resolution_clock
     this_thread::sleep_for(50ms + 29us);
     auto t2 = high_resolution_clock::now();
 
@@ -126,9 +128,45 @@ void accumulate_example() {
     int val2 = accumulate(v.begin(), v.end(), 15, [](int v1, int v2) { return v1 - v2;});
     cout << val2 << endl;
 }
-
+// B.S. suggests (for obvious reason) encapsulating this travesty in a class that implements
+// int operator()() { return dist(engine); }
 void random_nums_example() {
     cout << "random_nums_example" << endl;
+    // we need to specify and engine that we pass to a distribution and for some awkward reason we have to use 'using'
+    using default_engine = default_random_engine;
+    using uniform_dist = uniform_int_distribution<>; // we can also use uniform_real_distribution
+    // using normal_distribution; // bell curve dist
+    // using exponential_distribution; // exp dist
+
+    unsigned seed = numeric_limits<unsigned>::max();
+    cout << "seed: " << seed << endl;
+    default_engine engine {seed}; // optionally we pass current time as a seed
+    uniform_dist dist {11, 37}; // random b/w 1 & 10
+    auto rand_func = [&](){return dist(engine);}; // yes we need a lambda to to get a darn random number
+    // now we can finally get our rand numbers
+    for (int i = 0; i < 20; i++) {
+        cout << rand_func() << ",";
+    }
+    cout << endl;
+}
+
+// valarray is used for numerical computations
+void valarray_example() {
+    cout << "valarray_example" << endl;
+    valarray<int> a1 = {1, -2, 3};
+    valarray<int> a2 = { 4, 5, 6};
+
+    valarray<int> a3 = a1*2 + a2;
+    for (auto val : a3) {
+        cout << val << ",";
+    }
+    cout << endl;
+
+    a1 += -1;
+    valarray<int> a4 = abs(a1);
+    for (auto val : a4) {
+        cout << val << ",";
+    }
 }
 
 int main() {
@@ -141,6 +179,7 @@ int main() {
     errno_setting();
     accumulate_example();
     random_nums_example();
+    valarray_example();
 
     return 0;
 }
