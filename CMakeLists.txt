@@ -54,3 +54,6 @@ add_executable(
 add_executable(
         kubernetes
         braintrain/kubernetes/kubernetes.cpp)
+add_executable(
+        pascal
+        braintrain/pascal/pascal.cpp braintrain/pascal/EnglishDictionary.cpp braintrain/pascal/headers/EnglishDictionary.h)

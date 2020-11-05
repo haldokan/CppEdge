@@ -23,9 +23,6 @@ struct Book {
     [[nodiscard]] string summary() const { return title + "/" + to_string(pages); } // not much of a summary
 };
 
-// B.S defines this operator outside the struct conforming to his advise of defining operations not essential to a data
-// structure outside the data-structure so as no to increase its size and to avoid forcing relinking code that uses the data
-// structure because of these changes.
 bool operator<(const Book &first, const Book &second) {
     return first.pages < second.pages;
 }
