@@ -20,7 +20,7 @@ public:
     [[nodiscard]] std::string lookup(std::string) const override;
 
 private:
-    Translated m_dialect;
+    Translated m_translated;
     std::unordered_map<std::string, std::string> m_dict;
 };
 

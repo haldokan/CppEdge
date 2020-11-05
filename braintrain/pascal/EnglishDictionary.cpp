@@ -3,14 +3,14 @@
 #include <unordered_map>
 #include <iostream>
 
-EnglishDictionary::EnglishDictionary(Translated dialect): m_dialect {dialect} {
-    if (m_dialect == Translated::French) {
+EnglishDictionary::EnglishDictionary(Translated translated): m_translated {translated} {
+    if (m_translated == Translated::French) {
         m_dict = std::unordered_map<std::string, std::string> {
             {"hope", "espoir"},
             {"money", "argent"},
             {"health", "sante"},
         };
-    } else if (m_dialect == Translated::German) {
+    } else if (m_translated == Translated::German) {
         m_dict = std::unordered_map<std::string, std::string> {
                 {"hope", "Hoffe"},
                 {"money", "Geld"},
