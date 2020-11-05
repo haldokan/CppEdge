@@ -13,11 +13,11 @@ class EnglishDictionary : public Dictionary {
 public:
     static EnglishDictionary create(Translated translated) { return EnglishDictionary {translated};}
 
-    EnglishDictionary(Translated);
+    explicit EnglishDictionary(Translated);
 
     ~EnglishDictionary() override;
 
-    std::string lookup(std::string) const override;
+    [[nodiscard]] std::string lookup(std::string) const override;
 
 private:
     Translated m_dialect;
