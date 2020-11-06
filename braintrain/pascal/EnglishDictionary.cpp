@@ -1,7 +1,5 @@
 #include "headers/EnglishDictionary.h"
-#include <string>
 #include <unordered_map>
-#include <iostream>
 
 EnglishDictionary::EnglishDictionary(Translated translated): m_translated {translated} {
     if (m_translated == Translated::French) {
@@ -12,7 +10,7 @@ EnglishDictionary::EnglishDictionary(Translated translated): m_translated {trans
         };
     } else if (m_translated == Translated::German) {
         m_dict = std::unordered_map<std::string, std::string> {
-                {"hope", "Hoffe"},
+                {"hope", "Hoffnung"},
                 {"money", "Geld"},
                 {"health", "Gesundheit"},
         };
