@@ -57,3 +57,7 @@ add_executable(
 add_executable(
         pascal
         braintrain/pascal/pascal.cpp braintrain/pascal/EnglishDictionary.cpp braintrain/pascal/headers/EnglishDictionary.h)
+add_executable(
+        faraday
+        braintrain/faraday
+        braintrain/faraday/faraday.cpp)
