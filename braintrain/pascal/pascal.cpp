@@ -6,26 +6,6 @@
 
 using namespace std;
 
-struct School {
-    string name;
-    int capacity = 0;
-
-    // instead of passing name by ref (const &name), Clang-Tidy suggested passing by value and 'move'
-    School(string name, int capacity) : name{move(name)}, capacity{capacity} {}
-
-    bool operator==(const School &other) const {
-        return name == other.name;
-    }
-};
-
-bool operator<(const School &first, const School &second) {
-    return first.capacity < second.capacity;
-}
-
-ostream &operator<<(ostream &os, const School &b) {
-    return os << "{\"" << b.name << "\", " << b.capacity << "}";
-}
-
 // Dictionary is passed polymorphically to this func
 void static_class_create_callee(Dictionary &dict, string word) {
     string w = std::move(word); // the move is suggested by Clang-Tidy
@@ -48,8 +28,7 @@ void static_class_create() {
 void stream_formatting() {
     cout << "stream_formatting" << endl;
     cout.precision(4);  // be careful, this trash is not what it looks like: it is NOT the length of the decimal part
-    cout << 1232.567
-         << endl; // prints 1233 (rounded) - but again depends on large the number it may print it in scientific format
+    cout << 1232.567 << endl; // prints 1233 (rounded) - but again depends on large the number it may print it in scientific format
     cout << 123.71356 << endl; // prints 123.7
     cout << 1234567 << endl; // precision does not change integers
 
