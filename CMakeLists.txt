@@ -59,5 +59,10 @@ add_executable(
         braintrain/pascal/pascal.cpp braintrain/pascal/EnglishDictionary.cpp braintrain/pascal/headers/EnglishDictionary.h)
 add_executable(
         faraday
-        braintrain/faraday
         braintrain/faraday/faraday.cpp)
+
+find_package(Boost 1.74.0 COMPONENTS filesystem container date_time system thread REQUIRED)
+add_executable(
+        boostx
+        braintrain/boost/boostx.cpp)
+target_link_libraries(boostx Boost::filesystem Boost::filesystem Boost::container Boost::date_time Boost::system Boost::thread)
