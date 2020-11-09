@@ -64,8 +64,12 @@ add_executable(
 find_package(Boost 1.74.0 COMPONENTS filesystem container date_time system thread REQUIRED)
 add_executable(
         boostx
-        braintrain/boost/boostx.cpp braintrain/boostdi/boostdi.cpp)
+        braintrain/boost/boostx.cpp braintrain/boostdi/intro/boostdi.cpp)
 target_link_libraries(boostx Boost::filesystem Boost::filesystem Boost::container Boost::date_time Boost::system Boost::thread)
+
 add_executable(
-        boostdi
-        braintrain/boostdi/boostdi.cpp)
+        boostdi-intro
+        braintrain/boostdi/intro/boostdi.cpp)
+add_executable(
+        boostdi-bindings
+        braintrain/boostdi/bindings/bindings.cpp)

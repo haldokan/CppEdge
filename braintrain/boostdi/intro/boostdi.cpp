@@ -1,6 +1,6 @@
 #include <iostream>
 #include <utility>
-#include "di.hpp"
+#include "../di.hpp"
 
 using namespace std;
 namespace di = boost::di;
