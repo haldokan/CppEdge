@@ -105,10 +105,46 @@ void bind_templates() {
     injector.create<compilation>().compile();
 }
 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+struct width {
+    double width;
+    // this must be the cast operator since I can do: double d = (double) width {1.2}
+    constexpr explicit operator double() const {return width;}
+};
+
+struct height {
+    double height;
+    constexpr explicit operator double() const {return height;}
+};
+
+// passing 2 doubles to the cntr is error prone so we strong-typedef them
+class Rectangle {
+public:
+    Rectangle(width w, height h): m_width {w}, m_height {h} {}
+    [[nodiscard]] double area() const {
+        return m_width * m_height;
+    }
+private:
+    double m_width;
+    double m_height;
+};
+
+void strong_typedefs() {
+    Rectangle rectangle {width{5.2}, height{2.1}};
+    cout << rectangle.area() << endl;
+    // Rectangle rectangle2 {height{5.2}, width{2.1}}; now this will give a compile error
+
+    // I can cast struct width to double bcz the cast operator is defined in the struct
+    double d = (double) width{2.1};
+    cout << d << endl;
+}
+
 int main() {
     create_object_graph();
     bind_interfaces();
     bind_templates();
+    strong_typedefs(); // has nothing todo with boost::di but a nice technique described by its author and used in the framework
 
     return 0;
 }
