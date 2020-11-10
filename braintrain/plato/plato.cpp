@@ -172,6 +172,58 @@ void hash_table() {
 //    cout << map2[bob] << endl;
 }
 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+class engine {
+public:
+    engine(string make, int horse_power) : m_make(move(make)), m_horse_power(horse_power) {}
+    void upgrade(string make, int horse_power) {
+        m_make = std::move(make);
+        m_horse_power = horse_power;
+    }
+
+    [[nodiscard]] const string &get_make() const {
+        return m_make;
+    }
+
+    [[nodiscard]] int get_horse_power() const {
+        return m_horse_power;
+    }
+
+    string specs() {
+        return "engine: " + m_make + ", " + to_string(m_horse_power);
+    }
+private:
+    string m_make;
+    int m_horse_power;
+};
+
+struct series {
+    string name;
+};
+
+class car {
+public:
+    explicit car(const shared_ptr<engine> &engine, series series) : m_engine(engine), m_series{std::move(series)} {}
+    string specs() {
+        return "car: " + m_engine->get_make() + ", " + m_series.name + ", " + to_string(m_engine->get_horse_power());
+    }
+private:
+    shared_ptr<engine> m_engine;
+    series m_series;
+};
+
+void car_factory() {
+    shared_ptr<engine> engine1 = make_shared<engine>(engine {"bmw", 400});
+    cout << engine1->specs() << endl;
+
+    car car1 {engine1, {"macan"}};
+    cout << "before upgrade: " << car1.specs() << endl;
+
+    engine1->upgrade("porsche", 300); // now updating the engine thru the sptr will update it in the car as well
+    cout << "after upgrade: " + car1.specs() << endl;
+}
+
 int main() {
     iterate_vector();
     copy_vs_move_to_vector_caller();
@@ -180,6 +232,7 @@ int main() {
     vector_is_range_unchecked();
     ordered_map();
     hash_table();
+    car_factory();
 
     return 0;
 }
