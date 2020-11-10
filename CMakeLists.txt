@@ -71,5 +71,8 @@ add_executable(
         boostdi-intro
         braintrain/boostdi/intro/boostdi.cpp)
 add_executable(
-        boostdi-bindings
-        braintrain/boostdi/bindings/bindings.cpp)
+        boostdi-bindings1
+        braintrain/boostdi/bindings/bindings1.cpp)
+add_executable(
+        boostdi-bindings2
+        braintrain/boostdi/bindings/bindings2.cpp)
