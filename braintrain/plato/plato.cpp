@@ -211,7 +211,10 @@ public:
 private:
     const shared_ptr<engine> m_engine;
     // this now a pointer that hold the value of the passed ref; changes to the passed series anywhere will reflect here
-    // not sure doing that is a good thing
+    // I think this is not a good way to pass dependencies: raw pointers that would freakout if the resource they point to is deleted more than once
+    // also note that if this class goes out of scope and this pointer is not destroyed we will have a dangling ptr. We also
+    // can never be sure if it should be destroyed here or elsewhere.
+    // so a better option would have been to pass 'series' by value and move it to assigned it to the member
     const series &m_series;
 };
 
