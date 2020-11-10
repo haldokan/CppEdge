@@ -204,22 +204,25 @@ struct series {
 
 class car {
 public:
-    explicit car(const shared_ptr<engine> &engine, series series) : m_engine(engine), m_series{std::move(series)} {}
+    explicit car(const shared_ptr<engine> &engine, const series &series) : m_engine(engine), m_series{series} {}
     string specs() {
         return "car: " + m_engine->get_make() + ", " + m_series.name + ", " + to_string(m_engine->get_horse_power());
     }
 private:
-    shared_ptr<engine> m_engine;
-    series m_series;
+    const shared_ptr<engine> m_engine;
+    // this now a pointer that hold the value of the passed ref; changes to the passed series anywhere will reflect here
+    // not sure doing that is a good thing
+    const series &m_series;
 };
 
 void car_factory() {
     shared_ptr<engine> engine1 = make_shared<engine>(engine {"bmw", 400});
     cout << engine1->specs() << endl;
-
-    car car1 {engine1, {"macan"}};
+    series series1 {"macan"};
+    car car1 {engine1, series1};
     cout << "before upgrade: " << car1.specs() << endl;
 
+    series1.name = "mercedes"; // updating the series will reflect in the car because we assign the member to the ref
     engine1->upgrade("porsche", 300); // now updating the engine thru the sptr will update it in the car as well
     cout << "after upgrade: " + car1.specs() << endl;
 }
