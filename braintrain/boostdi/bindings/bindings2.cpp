@@ -45,7 +45,7 @@ public:
 
 private:
     iview &m_view; // iview must be a reference since it is an interface
-    model &m_model; // I think if this is not a ref it i will be copied (will to DI in c++ where nothing is straightforward)
+    model &m_model; // I think if this is not a ref it i will be copied (welcome to DI in c++ where nothing is straightforward)
 };
 
 struct user {
