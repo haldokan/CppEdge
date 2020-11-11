@@ -60,11 +60,33 @@ private:
     controller &m_controller;
 };
 
-int main() {
-    auto injector = di::make_injector(
+app interface_injector() {
+    cout << "interface_injector" << endl;
+    auto injector1 = di::make_injector(
             di::bind<string>.to("graphic_card"), // the renderer device
             di::bind<iview>.to<gui_view>()
     );
-    app app1 = injector.create<app>();
+    return injector1.create<app>();
+}
+
+app dynamic_interface_injector() {
+    cout << "dynamic_interface_injector" << endl;
+    auto use_gui_view = true; // or false;
+    const auto injector2 = di::make_injector(
+            di::bind<iview>.to([&](const auto& injector) -> iview& { // the -> iview& specifies the return type of lambda
+                if (use_gui_view)
+                    return injector.template create<gui_view&>(); // horrible and ugly syntax (it is a brothel of a language)
+                else
+                    return injector.template create<text_view&>();
+            })
+            , di::bind<string>.to("graphic_card") // renderer device
+    );
+    return injector2.create<app>();
+}
+
+int main() {
+    interface_injector();
+    dynamic_interface_injector();
+
     return 0;
 }
