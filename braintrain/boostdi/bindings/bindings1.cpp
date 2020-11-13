@@ -16,7 +16,7 @@ private:
     string m_name;
 };
 
-auto Size = []{}; //we noop lambda for the param name - in a real app this would have to be put in an h file and imported to using code?
+auto Size = []{}; //we use noop lambda for the param name - in a real app this would have to be put in an h file and imported to using code?
 struct model {
 public:
     // boost:di chooses the cntr with the most args. But with cntrs having the same num of args we need to tell boost:di which cntr we want to use
