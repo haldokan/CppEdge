@@ -58,7 +58,7 @@ public:
 
 class gui_view : public iview {
 public:
-    gui_view(string name, renderer &renderer) {}
+    gui_view(const string name, renderer &renderer) {}
     void refresh() override { cout << "view-text-refreshed"; }
 };
 

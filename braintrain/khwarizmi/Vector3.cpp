@@ -17,7 +17,7 @@ Vector3::Vector3(initializer_list<double> init): length {static_cast<int>(init.s
     copy(init.begin(), init.end(), items);
 }
 
-Vector3::Vector3(const Vector3 & v): length {v.length}, items {new double[v.length]} {
+Vector3::Vector3(const Vector3 & v): length {v.length}, items {new double[v.length]} { // copy cntr
     cout << "Vector3-copy-cntr is called" << endl;
     for (int i = 0; i != length; ++i) {
         items[i] = v.items[i];
