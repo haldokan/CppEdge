@@ -235,7 +235,7 @@ enum ErrorCode {
 };
 
 // c++ plays fast and loose with enums; find a phd-worth undertaking here: https://en.cppreference.com/w/cpp/language/enum
-void error_code_example() {
+void enum_example() {
     int numErr = 1;
     auto er = ErrorCode(numErr);
     if (er == ErrorCode::VALIDATION) {
@@ -260,6 +260,6 @@ int main() {
     ordered_map();
     hash_table();
     car_factory();
-    error_code_example();
+    enum_example();
     return 0;
 }
