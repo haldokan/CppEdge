@@ -244,10 +244,18 @@ void enum_example() {
 
     int numErr2 = 7;
     auto er2 = static_cast<ErrorCode>(numErr2);
-    cout << "er2: " << er2; // prints 7; striking!
+    cout << "er2: " << er2 << endl; // prints 7; striking!
 
     if (er2 == ErrorCode::VALIDATION || er2 == ErrorCode::TIMEOUT) {
         cout << "this should not happen" << endl; // not printed
+    }
+    // this does an implicit cast b/w int and enum
+    switch(numErr) {
+        case ErrorCode::VALIDATION: cout << "validation" << endl;
+            break;
+        case ErrorCode::TIMEOUT: cout << "timeout" << endl;
+            break;
+        default: throw invalid_argument("invalid numeric error: " + to_string(numErr));
     }
 }
 
