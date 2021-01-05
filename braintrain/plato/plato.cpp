@@ -230,6 +230,27 @@ void car_factory() {
     cout << "after upgrade: " + car1.specs() << endl;
 }
 
+enum ErrorCode {
+    VALIDATION = 1, TIMEOUT = 2
+};
+
+// c++ plays fast and loose with enums; find a phd-worth undertaking here: https://en.cppreference.com/w/cpp/language/enum
+void error_code_example() {
+    int numErr = 1;
+    auto er = ErrorCode(numErr);
+    if (er == ErrorCode::VALIDATION) {
+        cout << "validation: " << ErrorCode::VALIDATION << endl; // printed
+    }
+
+    int numErr2 = 7;
+    auto er2 = static_cast<ErrorCode>(numErr2);
+    cout << "er2: " << er2; // prints 7; striking!
+
+    if (er2 == ErrorCode::VALIDATION || er2 == ErrorCode::TIMEOUT) {
+        cout << "this should not happen" << endl; // not printed
+    }
+}
+
 int main() {
     iterate_vector();
     copy_vs_move_to_vector_caller();
@@ -239,6 +260,6 @@ int main() {
     ordered_map();
     hash_table();
     car_factory();
-
+    error_code_example();
     return 0;
 }
