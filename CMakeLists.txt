@@ -72,7 +72,9 @@ add_executable(
         braintrain/boostdi/intro/boostdi.cpp)
 add_executable(
         boostdi-bindings1
-        braintrain/boostdi/bindings/bindings1.cpp)
+        braintrain/boostdi/bindings/bindings1.cpp
+        braintrain/boost/hash_map.cpp
+        braintrain/boost/hash_map.h)
 add_executable(
         boostdi-bindings2
         braintrain/boostdi/bindings/bindings2.cpp)
