@@ -1,6 +1,13 @@
 #include "hash_map.h"
 #include <utility> // For std::move and std::make_pair
 #include <algorithm> // For std::find, though not used in map operations here
+#include <iostream>         // For printing in example methods
+
+// Implementation for TaskInfo
+std::ostream& operator<<(std::ostream& os, const Carriage& carriage) {
+    os << "Id: " << carriage.id << ", Capacity: " << carriage.capacity << ", Type" << carriage.type;
+    return os; // Important: return the ostream reference to allow chaining
+}
 
 // Constructor implementation
 Train::Train(const std::string& train_id) // Changed to const std::string&
@@ -69,7 +76,8 @@ void Train::printAllCarriages() const {
     // This is valid in C++11 and C++14.
     for (const auto& pair : d_carriages) {
         // 'pair' is a std::pair<const std::string, Carriage>
-        pair.second.print(); // Use the Carriage's print method
+        // pair.second.print(); // Use the Carriage's print method
+        std::cout << pair.second << std::endl;
     }
 }
 
@@ -103,8 +111,7 @@ int main() {
     std::cout << "\n--- Looking up carriages ---" << std::endl;
     const Carriage* foundCarriage = expressTrain.getCarriage("C002");
     if (foundCarriage) {
-        std::cout << "Found carriage C002:" << std::endl;
-        foundCarriage->print();
+        std::cout << "Found carriage C002:" << foundCarriage << std::endl;
     } else {
         std::cout << "Carriage C002 not found." << std::endl;
     }
@@ -117,8 +124,7 @@ int main() {
 
     const Carriage* notFoundCarriage = expressTrain.getCarriage("C999");
     if (notFoundCarriage) {
-        std::cout << "Found carriage C999 (unexpected):" << std::endl;
-        notFoundCarriage->print();
+        std::cout << "Found carriage C999 (unexpected):" << notFoundCarriage << std::endl;
     } else {
         std::cout << "Carriage C999 not found (as expected)." << std::endl;
     }

@@ -4,7 +4,9 @@
 #include <string>           // For std::string
 #include <unordered_map>    // For std::unordered_map
 #include <vector>           // To hold carriage information (optional, but good for example)
-#include <iostream>         // For printing in example methods
+struct Carriage;
+
+std::ostream& operator<<(std::ostream& os, const Carriage& carriage);
 
 // Define a struct to represent a single train carriage/wagon
 struct Carriage {
@@ -16,12 +18,15 @@ struct Carriage {
     Carriage(const std::string& id_val, int cap, const std::string& type_val)
         : id(id_val), capacity(cap), type(type_val) {}
 
+    // Declare the overloaded operator<< as a friend function
+    friend std::ostream& operator<<(std::ostream& os, const Carriage& carriage);
+
     // Method to print carriage info
-    void print() const {
-        std::cout << "  Carriage ID: " << id
-                  << ", Type: " << type
-                  << ", Capacity: " << capacity << std::endl;
-    }
+    // void print() const {
+    //     std::cout << "  Carriage ID: " << id
+    //               << ", Type: " << type
+    //               << ", Capacity: " << capacity << std::endl;
+    // }
 };
 
 class Train {
