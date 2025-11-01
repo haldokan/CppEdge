@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-// 1. Define the Test Fixture
+// 1. Define the Test Fixture.
 struct MyDatabaseTest : public ::testing::Test {
     // Common objects for tests
     std::string db_conn_;
