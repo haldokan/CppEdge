@@ -61,11 +61,22 @@ add_executable(
         faraday
         braintrain/faraday/faraday.cpp)
 
-find_package(Boost 1.74.0 COMPONENTS filesystem container date_time system thread REQUIRED)
 add_executable(
         boostx
-        braintrain/boost/boostx.cpp)
-target_link_libraries(boostx Boost::filesystem Boost::filesystem Boost::container Boost::date_time Boost::system Boost::thread)
+        braintrain/boost/Gtest.cpp)
+
+target_link_libraries(boostx
+        gtest_main # Links to Google Test library and its main function
+        pthread)
+
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG        release-1.12.1
+)
+# Fetch the content and add it to the build. This makes GTest targets available.
+FetchContent_MakeAvailable(googletest)
 
 add_executable(
         boostdi-intro
@@ -74,7 +85,11 @@ add_executable(
         boostdi-bindings1
         braintrain/boostdi/bindings/bindings1.cpp
         braintrain/boost/hash_map.cpp
-        braintrain/boost/hash_map.h)
+        braintrain/boost/hash_map.h
+        braintrain/boost/UniquePointer.cpp
+        braintrain/boost/SharedPointer.cpp
+        braintrain/boost/GenericLambda.cpp
+)
 add_executable(
         boostdi-bindings2
         braintrain/boostdi/bindings/bindings2.cpp)
